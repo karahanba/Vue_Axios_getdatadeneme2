@@ -38,7 +38,7 @@ export default {
     console.log('setup')
 
     //Data
-    const p = ref(null)
+    const p = ref(null) //In Vue 3.0 we can make any variable REACTIVE anywhere with a new ref function
 
     let name = 'Batuhan'
     let age = 25

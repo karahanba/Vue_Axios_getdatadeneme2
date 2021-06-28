@@ -50,16 +50,17 @@
 <script>
 //import HelloWorld from './components/HelloWorld.vue'
 import axios from "axios";
-import {onBeforeMount, reactive} from "vue";
+import {onBeforeMount, provide, reactive, ref} from "vue";
 import People from './components/People.vue'
 
 import Child from "./components/Child.vue";
+//import ChildOfChild from "./components/ChildOfChild.vue";
 
 export default {
   name: 'App',
   components:{
-    People,
-    Child
+    Child,
+    People
   },
   /*props:{
     //something:{i1:'asds',i2:'asds'}
@@ -76,12 +77,14 @@ export default {
       //list: [1,2,3]
     });
 
-    let desiredInfo ={ // Child componenti için tanımlandı.
+    let desiredInfo = reactive({ // Child componenti için tanımlandı.önceden reactive değildi?
       kullanici:{
         name: 'Batuhano',
         email: 'Batuhan@test'
-      }};
+      }});
 
+    // if a repository, randomUser for example, is not reactive.
+    // This means from a user's perspective, the repository list would remain empty.
     let randomUser = reactive({  //DAHA ÖNCE People.Vue İÇERİSİNDE TANIMLANIYORDU
       user: {
         first_name: "Default",
@@ -97,7 +100,7 @@ export default {
       await getCurrencyExchangeData();
       await getRandomNumberList();//?
     })
-    onBeforeMount( () => {
+    onBeforeMount( () => { //People.vue
       getRandomUser();
     })
 
@@ -114,8 +117,8 @@ export default {
                  .then(response =>randomNumbers.number = response.data.split('\n'))//console.log(response.data))
     }
 
-    function getInfo(){//For Child component
-      alert("Function Called")
+    async function getInfo(){//For Child component
+      await alert("Function Called")
 
     }
 
@@ -124,6 +127,23 @@ export default {
           .get('https://random-data-api.com/api/users/random_user')
           .then(response => randomUser.user = response.data)//console.log(response.data))//
     }
+
+
+    const information1 = ref('Merhaba')
+    const mypreciousobject = reactive({
+      longitude:90,
+      latitude:135
+    })
+    provide('information1',information1)
+    provide('mypreciousobject',mypreciousobject)
+
+
+    //Bunlar reactive değil
+    /*provide('information1','Merhaba')
+    provide('mypreciousobject',{
+      longitude:90,
+      latitude:135
+    })*/
 
 
     return{
@@ -136,14 +156,14 @@ export default {
       },*/
       desiredInfo,
       name:'Batuhanno',
-      randomUser,
+      randomUser, //People.vue
 
 
       /* Functions */
       getCurrencyExchangeData,
       getRandomNumberList,
       getInfo,
-      getRandomUser
+      getRandomUser //People.vue
 
     }
   },
